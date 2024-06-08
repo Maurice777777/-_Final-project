@@ -60,25 +60,7 @@ Elements *New_Monster(int label)//生成初始化設定
     printf("init\n");
     return pObj;
 }
-// void hp_bar(int x,int y,int w,int h,int rest)
-// {
-//     //al_draw_rounded_rectangle(x, y, x+w, y+h,1,1,al_map_rgb(255,0,0),2);
-//     al_draw_rectangle(x, y, x+w, y+h,al_map_rgb(255,0,0),1);
-//     al_draw_filled_rounded_rectangle(x, y, x+rest,y+h,1,1, al_map_rgb(255,0,0));
 
-// /*
-//     al_init_font_addon();
-//     al_init_ttf_addon();
-    
-//     char c[3];
-//     sprintf(c, "%d", rest);
-//     al_draw_text(
-//         al_load_font("pirulen.ttf",50,0),
-//         al_map_rgb(0,0,0),  x,  y, 0,c
-//     );
-//     //al_destroy_font(font);
-//     */
-// }
 void Monster_update(Elements *self)
 
 {
