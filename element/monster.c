@@ -20,18 +20,17 @@ Elements *New_Monster(int label)//生成初始化設定
     // setting derived object member
     // load Hero images
     char monstate_string[4][10] = {"stop", "move", "atk","atk2"};
-    printf("Good1");
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
     {
         char buffer[50];
         sprintf(buffer, "assets/image/monster/monster1-%s.gif", monstate_string[i]);
         pDerivedObj->gif_status[i] = algif_new_gif(buffer, -1);
     }
     // load effective sound
-    ALLEGRO_SAMPLE *sample = al_load_sample("assets/sound/monster-hit.wav");
-    pDerivedObj->mons_atk_Sound = al_create_sample_instance(sample);
-    al_set_sample_instance_playmode(pDerivedObj->mons_atk_Sound, ALLEGRO_PLAYMODE_ONCE);
-    al_attach_sample_instance_to_mixer(pDerivedObj->mons_atk_Sound, al_get_default_mixer());
+    // ALLEGRO_SAMPLE *sample = al_load_sample("assets/sound/monster-hit.wav");
+    // pDerivedObj->mons_atk_Sound = al_create_sample_instance(sample);
+    // al_set_sample_instance_playmode(pDerivedObj->mons_atk_Sound, ALLEGRO_PLAYMODE_ONCE);
+    // al_attach_sample_instance_to_mixer(pDerivedObj->mons_atk_Sound, al_get_default_mixer());
 
     // initial the geometric information of Hero
     pDerivedObj->width = pDerivedObj->gif_status[0]->width;
@@ -55,7 +54,45 @@ Elements *New_Monster(int label)//生成初始化設定
     pObj->Update = Monster_update;
     pObj->Interact = Monster_interact;
     pObj->Destroy = Monster_destory;
-    printf("init2\n");
+<<<<<<<<< Temporary merge branch 1
+
+
+    // printf("打炮\n");
+    // Monster *pDerivedObj2 = (Monster *)malloc(sizeof(Monster));
+    // Elements *pObj2 = New_Elements(label);
+    // char monstate2_string[3][10] = {"stop", "move", "atk"};
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     printf("1\n");
+    //     char buffer2[50];
+    //     sprintf(buffer2, "assets/image/monster1-%s.gif", monstate2_string[i]);
+    //     printf("sad\n");
+    //     pDerivedObj2->gif_status2[i] = algif_new_gif(buffer2, -1);
+    //     printf("omg\n");
+    // }
+    // pDerivedObj2->width1 = pDerivedObj2->gif_status2[0]->width;
+    // pDerivedObj2->height1 = pDerivedObj2->gif_status2[0]->height;
+    // pDerivedObj2->x1 = 1600;
+    // pDerivedObj2->y1 = HEIGHT - pDerivedObj->height - 60;
+    // pDerivedObj2->life1 = pDerivedObj->full_life = 50;
+    // pDerivedObj2->minus2_permit = true;
+    // pDerivedObj2->hitbox1 = New_Rectangle(pDerivedObj2->x1,
+    //                                     pDerivedObj2->y1,
+    //                                     pDerivedObj2->x1 + pDerivedObj2->width1,
+    //                                     pDerivedObj->y1 + pDerivedObj->height1);
+    // pDerivedObj2->mons_dir = true; // true: face to right, false: face to left
+    // pObj2->inter_obj[pObj2->inter_len++] = Hero_L;
+    // // initial the animation component
+    // pDerivedObj2->monstate1 = MONMOVE;
+    // pDerivedObj2->mons2_new_proj = false;
+    // pObj2->pDerivedObj = pDerivedObj2;
+    // // setting derived object function
+    // pObj2->Draw = Monster_draw;
+    // pObj2->Update = Monster_update;
+    // pObj2->Interact = Monster_interact;
+    // pObj2->Destroy = Monster_destory;
+=========
+>>>>>>>>> Temporary merge branch 2
     return pObj;
 }
 
@@ -79,7 +116,7 @@ void Monster_update(Elements *self)
     // Move the monster
     if(mons->monstate==MONMOVE)
     {
-        if (mons->mons_dir) 
+        if (mons->mons_dir)
         {
             _Monster_update_position(self, 5, 0); // Move to the right
         }
@@ -124,13 +161,8 @@ void Monster_update(Elements *self)
         change_window=2;
         self->dele=true;
     }
-
 }
-// void hp_bar(int x,int y,int w,int h,int rest){
-//     //al_draw_rounded_rectangle(x, y, x+w, y+h,1,1,al_map_rgb(255,0,0),2);
-//     al_draw_rectangle(x, y, x+w, y+h,al_map_rgb(255,0,0),1);
-//     al_draw_filled_rounded_rectangle(x, y, x+rest,y+h,1,1, al_map_rgb(255,0,0));
-// }
+
 void Monster_draw(Elements *self)
 {
     // with the state, draw corresponding image
@@ -224,6 +256,7 @@ void Monster_interact(Elements *const self , Elements *const _target)
     }
     else if (mons->gif_status[mons->monstate]->done)
         mons->monstate = MONMOVE;
+
     if(target->state==atked&&mons->gif_status[MONATK]->display_index >= 7)target->state=stop;
     if(mons->gif_status[mons->monstate]->done)mons->minus_permit=true;
 

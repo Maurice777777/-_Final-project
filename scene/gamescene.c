@@ -57,10 +57,10 @@ void game_scene_update(Scene *self)
         if (ele->dele)
             _Remove_elements(self, ele);
     }
-    if (change_window==1)
+
+    if(change_window==1)
     {
         self->scene_end = true;
-        printf("hi\n");
         window = 3;
         change_window=0;
     }
