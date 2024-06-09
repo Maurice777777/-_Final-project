@@ -38,7 +38,7 @@ void winscene_update(Scene *self)
     if (key_state[ALLEGRO_KEY_ENTER])
     {
         self->scene_end = true;
-        window = 1;
+        window = 0;
     }
     return;
 }
