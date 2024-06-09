@@ -16,6 +16,7 @@ void create_scene(SceneType type)
         scene = New_GameScene(GameScene_L);
         break;
     case WinScene_L:
+        printf("in 2 \n");
         scene = New_Winscene(WinScene_L);
         break;
     case GgScene_L:

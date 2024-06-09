@@ -16,6 +16,7 @@ typedef enum HeroType{
     stop=0,
     move,
     atk,
+    atk2,
     dodge,
     atked,
     die
@@ -30,9 +31,12 @@ typedef struct _Hero
     int width, height;              // the width and height of image
     int life,full_life;
     bool minus_permit;
+    int stiff;
+    
+    int atk2_conti_minus;
     bool dir;                       // true: face to right, false: face to left
     int state;                      // the state of Hero
-    ALGIF_ANIMATION *gif_status[6]; // gif for each state. 0: stop, 1: move, 2:attack
+    ALGIF_ANIMATION *gif_status[7]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
     int skill;
     int anime;      // counting the time of animation
@@ -43,6 +47,7 @@ typedef struct _Hero
 Elements *New_Hero(int label); 
 void _Hero_update_position(Elements *self, int dx, int dy);
 void Hero_update(Elements *self);
+bool Hero_intersect(int x1,bool d1,int x2,int type);
 void Hero_interact(Elements *self, Elements *target);
 void Hero_draw(Elements *self);
 void Hero_destory(Elements *self);

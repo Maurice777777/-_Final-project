@@ -23,7 +23,6 @@ Elements *New_Monster(int label)//生成初始化設定
     
     for (int i = 0; i < 4; i++)
     {
-        printf("%d\n",i);
         char buffer[50];
         sprintf(buffer, "assets/image/monster/monster1-%s.gif", monstate_string[i]);
         pDerivedObj->gif_status[i] = algif_new_gif(buffer, -1);
@@ -117,7 +116,10 @@ void Monster_update(Elements *self)
         }
     }
 
-    if(mons->life==0)change_window=2;
+    if(mons->life==0){
+        change_window=2;
+        self->dele=true;
+    }
 }
 
 void Monster_draw(Elements *self)
@@ -137,7 +139,7 @@ void Monster_draw(Elements *self)
 }
 void Monster_destory(Elements *self)
 {
-    printf("c");
+    printf("in d\n");
     Monster *Obj = ((Monster *)(self->pDerivedObj));
     printf("c");
     //al_destroy_sample_instance(Obj->mons_atk_Sound);

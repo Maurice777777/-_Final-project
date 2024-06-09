@@ -29,7 +29,7 @@ typedef struct _Monster
     bool mons_dir;                       // true: face to right, false: face to left
     int monstate;                      // the state of character
     ALGIF_ANIMATION *gif_status[4]; // gif for each state. 0: stop, 1: move, 2:attack
-    ALLEGRO_SAMPLE_INSTANCE *mons_atk_Sound;
+    //ALLEGRO_SAMPLE_INSTANCE *mons_atk_Sound;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
     bool mons_new_proj;
@@ -43,5 +43,4 @@ void Monster_interact(Elements *self, Elements *target);
 void Monster_draw(Elements *self);
 void Monster_destory(Elements *self);
 //void hp_bar(int x,int y,int w,int h,int rest);
-
 #endif

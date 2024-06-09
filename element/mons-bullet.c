@@ -51,6 +51,7 @@ void Monsbullet_interact(Elements *self, Elements *_tar)
     if(abs(obj->x-tar->x)<3){
         self->dele = true;
         tar->life-=tar->life>=10?10:tar->life;
+        tar->state=atked;
     }
 }
 void Monsbullet_draw(Elements *self)
