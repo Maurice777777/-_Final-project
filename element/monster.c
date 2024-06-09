@@ -82,7 +82,7 @@ void Monster_update(Elements *self)
         if (mons->mons_dir) 
         {
             _Monster_update_position(self, 5, 0); // Move to the right
-        } 
+        }
         else 
         {
             _Monster_update_position(self, -5, 0); // Move to the left
@@ -140,17 +140,19 @@ void Monster_interact(Elements *const self , Elements *const _target)
     {
         mons->monstate = MONATK;
 
-        if(mons->gif_status[MONATK]->display_index == 5) {
+        if(mons->gif_status[MONATK]->display_index == 5&&target->state!=dodge) {
             if(mons->minus_permit){
                 int minus= 5<=target->life? 5:target->life;
 
                 target->life-= minus;
                 mons->minus_permit=false;
             }
+            target->state=atked;
         }
     }
     else if (mons->gif_status[mons->monstate]->done)
         mons->monstate = MONMOVE;
 
+    if(target->state==atked&&mons->gif_status[MONATK]->display_index >= 7)target->state=stop;
     if(mons->gif_status[mons->monstate]->done)mons->minus_permit=true;
 }

@@ -12,12 +12,13 @@
    [Hero object]
 */
 
-typedef enum HeroType
-{
-    hold = 0,
-    run,
+typedef enum HeroType{
+    stop=0,
+    move,
     atk,
-    dodge
+    dodge,
+    atked,
+    die
 } HeroType;
 typedef struct _Hero
 {
@@ -27,7 +28,7 @@ typedef struct _Hero
     bool minus_permit;
     bool dir;                       // true: face to right, false: face to left
     int state;                      // the state of Hero
-    ALGIF_ANIMATION *gif_status[4]; // gif for each state. 0: stop, 1: move, 2:attack
+    ALGIF_ANIMATION *gif_status[6]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation

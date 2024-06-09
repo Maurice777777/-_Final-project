@@ -1,7 +1,7 @@
 #include "hero.h"
 #include "../scene/sceneManager.h"
 #include "projectile.h"
-
+#include "../global.h"
 #include "monster.h"
 #include "../shapes/Rectangle.h"
 #include "../algif5/src/algif.h"
@@ -21,8 +21,8 @@ Elements *New_Hero(int label)
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load Hero images
-    char state_string[4][10] = {"stop", "move", "attack","dodge"};
-    for (int i = 0; i < 4; i++)
+    char state_string[6][10] = {"stop", "move", "attack","dodge","in hit","die"};
+    for (int i = 0; i < 6; i++)
     {
         char buffer[50];
         sprintf(buffer, "assets/image/hero/%s.gif", state_string[i]);
@@ -47,7 +47,7 @@ Elements *New_Hero(int label)
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
     pDerivedObj->dir = true; // true: face to right, false: face to left
-    pDerivedObj->life=pDerivedObj->full_life=100;
+    pDerivedObj->life=pDerivedObj->full_life=100;pDerivedObj->life=20;
     pDerivedObj->minus_permit=true;
     pObj->inter_obj[pObj->inter_len++] = Monster_L;
     // initial the animation component
@@ -64,14 +64,11 @@ Elements *New_Hero(int label)
 }
 void Hero_update(Elements *self)
 {
-    // use the idea of finite state machine to deal with different state
     Hero *chara = ((Hero *)(self->pDerivedObj));
-    if(chara->state == dodge){
-        if(chara->dir)_Hero_update_position(self, -5, 0);
-        else _Hero_update_position(self, 5, 0);
-        chara->state = hold;
-    }
-    if (chara->state == hold)
+    if(chara->life==0)    chara->state=die;
+    if(chara->state==atked)return;
+
+    if (chara->state == stop||chara->state == dodge)
     {
         if(key_state[ALLEGRO_KEY_L]){
             chara->state = dodge;
@@ -83,19 +80,22 @@ void Hero_update(Elements *self)
         else if (key_state[ALLEGRO_KEY_A])
         {
             chara->dir = false;
-            chara->state = run;
+            chara->state = move;
         }
         else if (key_state[ALLEGRO_KEY_D])
         {
             chara->dir = true;
-            chara->state = run;
+            chara->state = move;
         }
-        else
-        {
-            chara->state = hold;
+
+        if(chara->state == dodge){
+            if(chara->dir)_Hero_update_position(self, -5, 0);
+            else _Hero_update_position(self, 5, 0);
+            if (chara->gif_status[chara->state]->done&&!key_state[ALLEGRO_KEY_L])
+                chara->state = stop;
         }
     }
-    else if (chara->state == run)
+    else if (chara->state == move)
     {
         if(key_state[ALLEGRO_KEY_L]){
             chara->state = dodge;
@@ -108,22 +108,23 @@ void Hero_update(Elements *self)
         {
             chara->dir = false;
             _Hero_update_position(self, -5, 0);
-            chara->state = run;
+            chara->state = move;
         }
         else if (key_state[ALLEGRO_KEY_D])
         {
             chara->dir = true;
             _Hero_update_position(self, 5, 0);
-            chara->state = run;
+            chara->state = move;
         }
-        if (chara->gif_status[chara->state]->done)
-            chara->state = hold;
+
+        if (chara->state==move&&!(key_state[ALLEGRO_KEY_D]||key_state[ALLEGRO_KEY_A]))
+            chara->state = stop;
     }
     else if (chara->state == atk)
     {
         if (chara->gif_status[chara->state]->done)
         {
-            chara->state = hold;
+            chara->state = stop;
             chara->new_proj = false;
         }
         // if (chara->gif_status[atk]->display_index == 2 && chara->new_proj == false)
@@ -147,34 +148,21 @@ void Hero_update(Elements *self)
         //     chara->new_proj = true;
         // }
     }
+    else if(chara->state==die&&chara->gif_status[chara->state]->done){
+        self->dele=true ;
+        change_window=1;
+    }
 }
-// void hp_bar(int x,int y,int w,int h,int rest){
-//     //al_draw_rounded_rectangle(x, y, x+w, y+h,1,1,al_map_rgb(255,0,0),2);
-//     al_draw_rectangle(x, y, x+w, y+h,al_map_rgb(255,0,0),1);
-//     al_draw_filled_rounded_rectangle(x, y, x+rest,y+h,1,1, al_map_rgb(255,0,0));
 
-// /*
-//     al_init_font_addon();
-//     al_init_ttf_addon();
-    
-//     char c[3];
-//     sprintf(c, "%d", rest);
-//     al_draw_text(
-//         al_load_font("pirulen.ttf",50,0),
-//         al_map_rgb(0,0,0),  x,  y, 0,c
-//     );
-//     //al_destroy_font(font);
-//     */
-// }
 void Hero_draw(Elements *self)
 {
     // with the state, draw corresponding image
     Hero *chara = ((Hero *)(self->pDerivedObj));
     ALLEGRO_BITMAP *frame = algif_get_bitmap(chara->gif_status[chara->state], al_get_time());
+    
     if (frame)
     {
-        hp_bar(chara->x,chara->y,chara->full_life,5,
-                   chara->life);
+        hp_bar(chara->x,chara->y,chara->full_life,5,chara->life);
         //chara->life-=chara->life>0?1:0;
         al_draw_bitmap(frame, chara->x, chara->y, ((chara->dir) ? 0:ALLEGRO_FLIP_HORIZONTAL ));
     }
@@ -187,7 +175,7 @@ void Hero_destory(Elements *self)
 {
     Hero *Obj = ((Hero *)(self->pDerivedObj));
     al_destroy_sample_instance(Obj->atk_Sound);
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 6; i++)
         algif_destroy_animation(Obj->gif_status[i]);
     free(Obj->hitbox);
     free(Obj);

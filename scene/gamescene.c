@@ -57,6 +57,11 @@ void game_scene_update(Scene *self)
         if (ele->dele)
             _Remove_elements(self, ele);
     }
+    if(change_window==1){
+        self->scene_end = true;
+        window = 2;
+        change_window=0;
+    }
     if (key_state[ALLEGRO_KEY_P])
     {
         self->scene_end = true;
