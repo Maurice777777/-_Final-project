@@ -7,8 +7,10 @@
 Scene *New_Winscene(int label)
 {
     Winscene *pDerivedObj = (Winscene *)malloc(sizeof(Winscene));
+    printf("////");
     Scene *pObj = New_Scene(label);
     pDerivedObj->background = al_load_bitmap("assets/image/winscene.png");
+    printf("蝦\n");
     // setting derived object member
     pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 12, 0);
     // Load sound

@@ -24,9 +24,12 @@ Elements *New_Monster(int label)//生成初始化設定
     printf("Good1");
     for (int i = 0; i < 3; i++)
     {
+        printf("1\n");
         char buffer[50];
         sprintf(buffer, "assets/image/monster1-%s.gif", monstate_string[i]);
+        printf("sad\n");
         pDerivedObj->gif_status[i] = algif_new_gif(buffer, -1);
+        printf("omg\n");
     }
     printf("Good2");
     // load effective sound
@@ -38,7 +41,7 @@ Elements *New_Monster(int label)//生成初始化設定
     // initial the geometric information of Hero
     pDerivedObj->width = pDerivedObj->gif_status[0]->width;
     pDerivedObj->height = pDerivedObj->gif_status[0]->height;
-    pDerivedObj->x = 300;
+    pDerivedObj->x = 1600;
     pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
     pDerivedObj->life = pDerivedObj->full_life = 50;
     pDerivedObj->minus_permit = true;
@@ -57,7 +60,7 @@ Elements *New_Monster(int label)//生成初始化設定
     pObj->Update = Monster_update;
     pObj->Interact = Monster_interact;
     pObj->Destroy = Monster_destory;
-    printf("init\n");
+    printf("init2\n");
     return pObj;
 }
 

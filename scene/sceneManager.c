@@ -11,7 +11,9 @@ void create_scene(SceneType type)
         scene = New_Menu(Menu_L);
         break;
     case GameScene_L:
+        printf("三小\n");
         scene = New_GameScene(GameScene_L);
+        printf("三小\n");
         break;
     case WinScene_L:
         scene = New_Winscene(WinScene_L);

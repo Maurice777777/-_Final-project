@@ -42,5 +42,4 @@ void Monster_interact(Elements *self, Elements *target);
 void Monster_draw(Elements *self);
 void Monster_destory(Elements *self);
 //void hp_bar(int x,int y,int w,int h,int rest);
-
 #endif

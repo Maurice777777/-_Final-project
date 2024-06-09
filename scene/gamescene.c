@@ -59,8 +59,11 @@ void game_scene_update(Scene *self)
     }
     if (key_state[ALLEGRO_KEY_P])
     {
+        printf("fuck\n");
         self->scene_end = true;
+        printf("三小\n");
         window = 2;
+        printf("wr\n");
     }
     return;
 }
