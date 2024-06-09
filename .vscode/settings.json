@@ -20,6 +20,8 @@
 		"global.h": "c",
 		"gamescene.h": "c",
 		"scene.h": "c",
-		"element.h": "c"
+		"element.h": "c",
+		"gg_scene.h": "c",
+		"winscene.h": "c"
 	}
 }

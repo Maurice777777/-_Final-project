@@ -11,7 +11,7 @@ typedef struct _Monsbullet
     int x, y;          // the position of image
     int width, height; // the width and height of image
     int v;             // the velocity of projectile
-    ALLEGRO_BITMAP *img;
+    ALGIF_ANIMATION *gif;
     Shape *hitbox; // the hitbox of object
 } Monsbullet;
 Elements *New_Monsbullet(int label, int x, int y, int v);

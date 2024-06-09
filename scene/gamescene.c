@@ -59,15 +59,21 @@ void game_scene_update(Scene *self)
     }
     if(change_window==1){
         self->scene_end = true;
+        window = 3;
+        change_window=0;
+    }
+    if(change_window==2){
+        self->scene_end = true;
         window = 2;
         change_window=0;
     }
-    if (key_state[ALLEGRO_KEY_P])
-    {
-        self->scene_end = true;
-        window = 2;
-    }
-    return;
+
+    // if (key_state[ALLEGRO_KEY_P])
+    // {
+    //     self->scene_end = true;
+    //     window = 3;
+    // }
+    // return;
 }
 void game_scene_draw(Scene *self)
 {

@@ -16,7 +16,6 @@
 */
 Elements *New_Hero(int label)
 {
-    printf("i");
     Hero *pDerivedObj = (Hero *)malloc(sizeof(Hero));
     Elements *pObj = New_Elements(label);
     // setting derived object member
@@ -47,11 +46,12 @@ Elements *New_Hero(int label)
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
     pDerivedObj->dir = true; // true: face to right, false: face to left
-    pDerivedObj->life=pDerivedObj->full_life=100;pDerivedObj->life=20;
+    pDerivedObj->life=pDerivedObj->full_life=50;
     pDerivedObj->minus_permit=true;
     pObj->inter_obj[pObj->inter_len++] = Monster_L;
     // initial the animation component
     pDerivedObj->state = STOP;
+    pDerivedObj->skill = 0;
     pDerivedObj->new_proj = false;
     pObj->pDerivedObj = pDerivedObj;
     // setting derived object function
@@ -59,7 +59,6 @@ Elements *New_Hero(int label)
     pObj->Update = Hero_update;
     pObj->Interact = Hero_interact;
     pObj->Destroy = Hero_destory;
-    printf("i");
     return pObj;
 }
 void Hero_update(Elements *self)
@@ -87,6 +86,15 @@ void Hero_update(Elements *self)
             chara->dir = true;
             chara->state = move;
         }
+        // else if (key_state[ALLEGRO_KEY_U])
+        // {
+        //     chara->state=atk;
+        //     chara->skill=1;
+        // }else if (key_state[ALLEGRO_KEY_I])
+        // {
+        //     chara->state=atk;
+        //     chara->skill=2;
+        // }
 
         if(chara->state == dodge){
             if(chara->dir)_Hero_update_position(self, -5, 0);
@@ -116,6 +124,15 @@ void Hero_update(Elements *self)
             _Hero_update_position(self, 5, 0);
             chara->state = move;
         }
+        // else if (key_state[ALLEGRO_KEY_U])
+        // {
+        //     chara->state=atk;
+        //     chara->skill=1;
+        // }else if (key_state[ALLEGRO_KEY_I])
+        // {
+        //     chara->state=atk;
+        //     chara->skill=2;
+        // }
 
         if (chara->state==move&&!(key_state[ALLEGRO_KEY_D]||key_state[ALLEGRO_KEY_A]))
             chara->state = stop;

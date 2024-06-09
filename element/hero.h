@@ -20,6 +20,10 @@ typedef enum HeroType{
     atked,
     die
 } HeroType;
+typedef enum _Change_window{
+    h_die=1,
+    win
+} _change_window;
 typedef struct _Hero
 {
     int x, y;
@@ -30,6 +34,7 @@ typedef struct _Hero
     int state;                      // the state of Hero
     ALGIF_ANIMATION *gif_status[6]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
+    int skill;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
     bool new_proj;

@@ -1,5 +1,5 @@
 #include "monster.h"
-#include "charater.h"
+#include "../global.h"
 
 #include "../scene/sceneManager.h"
 #include "../scene/gamescene.h"
@@ -15,20 +15,19 @@
 */
 Elements *New_Monster(int label)//生成初始化設定
 {
-    printf("init\n");
     Monster *pDerivedObj = (Monster *)malloc(sizeof(Monster));
     Elements *pObj = New_Elements(label);
     // setting derived object member
     // load Hero images
-    char monstate_string[3][10] = {"stop", "move", "atk"};
-    printf("Good1");
-    for (int i = 0; i < 3; i++)
+    char monstate_string[4][10] = {"stop", "move", "atk","atk2"};
+    
+    for (int i = 0; i < 4; i++)
     {
+        printf("%d\n",i);
         char buffer[50];
-        sprintf(buffer, "assets/image/monster1-%s.gif", monstate_string[i]);
+        sprintf(buffer, "assets/image/monster/monster1-%s.gif", monstate_string[i]);
         pDerivedObj->gif_status[i] = algif_new_gif(buffer, -1);
     }
-    printf("Good2");
     // load effective sound
     // ALLEGRO_SAMPLE *sample = al_load_sample("assets/sound/atk_sound.wav");
     // pDerivedObj->atk_Sound = al_create_sample_instance(sample);
@@ -46,7 +45,7 @@ Elements *New_Monster(int label)//生成初始化設定
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
-    pDerivedObj->mons_dir = true; // true: face to right, false: face to left
+    pDerivedObj->mons_dir = false; // true: face to right, false: face to left
     pObj->inter_obj[pObj->inter_len++] = Hero_L;
     // initial the animation component
     pDerivedObj->monstate = MONMOVE;
@@ -57,12 +56,10 @@ Elements *New_Monster(int label)//生成初始化設定
     pObj->Update = Monster_update;
     pObj->Interact = Monster_interact;
     pObj->Destroy = Monster_destory;
-    printf("init\n");
     return pObj;
 }
 
 void Monster_update(Elements *self)
-
 {
     // use the idea of finite state machine to deal with different state
     Monster *mons = ((Monster *)(self->pDerivedObj));
@@ -79,7 +76,7 @@ void Monster_update(Elements *self)
 
     // Move the monster
     if(mons->monstate==MONMOVE){
-        if (mons->mons_dir) 
+        if (mons->mons_dir)
         {
             _Monster_update_position(self, 5, 0); // Move to the right
         }
@@ -88,12 +85,41 @@ void Monster_update(Elements *self)
             _Monster_update_position(self, -5, 0); // Move to the left
         }
     }
+    else if(mons->monstate == MONATK){
+
+    }
+    else if (mons->monstate == MONATK2)
+    {
+        if (mons->gif_status[mons->monstate]->done)
+        {
+            mons->monstate = MONMOVE;
+            mons->mons_new_proj = false;
+        }
+        else if (mons->gif_status[MONATK2]->display_index == 2 && mons->mons_new_proj == false)
+        {
+            Elements *blt;
+            if (mons->mons_dir)
+            {
+                blt = New_Monsbullet(Monsbullet_L,
+                                     mons->x + mons->width - 100,
+                                     mons->y + 10,
+                                     5);
+            }
+            else
+            {
+                blt = New_Monsbullet(Monsbullet_L,
+                                     mons->x - 50,
+                                     mons->y + 10,
+                                     -5);
+            }
+            _Register_elements(scene, blt);
+            mons->mons_new_proj = true;
+        }
+    }
+
+    if(mons->life==0)change_window=2;
 }
-// void hp_bar(int x,int y,int w,int h,int rest){
-//     //al_draw_rounded_rectangle(x, y, x+w, y+h,1,1,al_map_rgb(255,0,0),2);
-//     al_draw_rectangle(x, y, x+w, y+h,al_map_rgb(255,0,0),1);
-//     al_draw_filled_rounded_rectangle(x, y, x+rest,y+h,1,1, al_map_rgb(255,0,0));
-// }
+
 void Monster_draw(Elements *self)
 {
     // with the state, draw corresponding image
@@ -111,10 +137,15 @@ void Monster_draw(Elements *self)
 }
 void Monster_destory(Elements *self)
 {
+    printf("c");
     Monster *Obj = ((Monster *)(self->pDerivedObj));
-    al_destroy_sample_instance(Obj->mons_atk_Sound);
-    for (int i = 0; i < 3; i++)
+    printf("c");
+    //al_destroy_sample_instance(Obj->mons_atk_Sound);
+    printf("c");
+    for (int i = 0; i < 4; i++){
+        printf("=%d\n",i);
         algif_destroy_animation(Obj->gif_status[i]);
+    }
     free(Obj->hitbox);
     free(Obj);
     free(self);
@@ -142,13 +173,17 @@ void Monster_interact(Elements *const self , Elements *const _target)
 
         if(mons->gif_status[MONATK]->display_index == 5&&target->state!=dodge) {
             if(mons->minus_permit){
-                int minus= 5<=target->life? 5:target->life;
+                int minus= 10<=target->life? 10:target->life;
 
                 target->life-= minus;
                 mons->minus_permit=false;
             }
             target->state=atked;
         }
+    }
+    else if( ((10<=mons->x-target->x && mons->x-target->x<500 && mons->mons_dir==false)||
+         (10<=target->x-mons->x && target->x-mons->x<500 && mons->mons_dir==true)) ){
+        mons->monstate = MONATK2;
     }
     else if (mons->gif_status[mons->monstate]->done)
         mons->monstate = MONMOVE;
