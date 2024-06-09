@@ -25,7 +25,8 @@ typedef struct _Monster
     int x, y;
     int width, height;              // the width and height of image
     int life,full_life;
-    bool mons_dir;                       // true: face to right, false: face to left
+    bool mons_dir;
+    bool splitted;                       // true: face to right, false: face to left
     int monstate;                      // the state of character
     ALGIF_ANIMATION *gif_status[3]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *mons_atk_Sound;
@@ -34,8 +35,9 @@ typedef struct _Monster
     bool mons_new_proj;
     bool minus_permit;
     Shape *hitbox; // the hitbox of object
+
 } Monster;
-Elements *New_Monster(int label);
+Elements *New_Monster(int labe);
 void _Monster_update_position(Elements *self, int dx, int dy);
 void Monster_update(Elements *self);
 void Monster_interact(Elements *self, Elements *target);
