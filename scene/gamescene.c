@@ -57,14 +57,20 @@ void game_scene_update(Scene *self)
         if (ele->dele)
             _Remove_elements(self, ele);
     }
-    if (key_state[ALLEGRO_KEY_P])
+    if (change_window==1)
     {
         self->scene_end = true;
-        printf("三小\n");
-        window = 2;
-        printf("wr\n");
+        printf("hi\n");
+        window = 3;
+        change_window=0;
     }
-    return;
+
+    // if (key_state[ALLEGRO_KEY_P])
+    // {
+    //     self->scene_end = true;
+    //     window = 3;
+    // }
+    // return;
 }
 void game_scene_draw(Scene *self)
 {
@@ -80,6 +86,7 @@ void game_scene_draw(Scene *self)
 }
 void game_scene_destroy(Scene *self)
 {
+    printf("in d\n");
     GameScene *Obj = ((GameScene *)(self->pDerivedObj));
     ALLEGRO_BITMAP *background = Obj->background;
     al_destroy_bitmap(background);
@@ -87,8 +94,11 @@ void game_scene_destroy(Scene *self)
     for (int i = 0; i < allEle.len; i++)
     {
         Elements *ele = allEle.arr[i];
+        printf("%d %d\n",i,ele->label);
         ele->Destroy(ele);
+        printf("%d\n",i);
     }
     free(Obj);
     free(self);
+    printf("d all \n");
 }

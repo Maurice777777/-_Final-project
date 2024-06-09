@@ -14,6 +14,14 @@
 		"ostream": "c",
 		"allegro_primitives.h": "c",
 		"rectangle.h": "c",
-		"scenemanager.h": "c"
+		"scenemanager.h": "c",
+		"allegro_font.h": "c",
+		"allegro_ttf.h": "c",
+		"global.h": "c",
+		"gamescene.h": "c",
+		"scene.h": "c",
+		"element.h": "c",
+		"gg_scene.h": "c",
+		"winscene.h": "c"
 	}
 }

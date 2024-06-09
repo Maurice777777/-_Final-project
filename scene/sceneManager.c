@@ -2,21 +2,25 @@
 #include "menu.h"
 #include "gamescene.h"
 #include "winscene.h"
+#include "gg_scene.h"
 Scene *scene = NULL;
 void create_scene(SceneType type)
 {
+    printf("t=%d\n",type);
     switch (type)
     {
     case Menu_L:
         scene = New_Menu(Menu_L);
         break;
     case GameScene_L:
-        printf("三小\n");
         scene = New_GameScene(GameScene_L);
-        printf("三小\n");
         break;
     case WinScene_L:
+        printf("in 2 \n");
         scene = New_Winscene(WinScene_L);
+        break;
+    case GgScene_L:
+        scene = New_ggscene(GgScene_L);
         break;
     default:
         break;
