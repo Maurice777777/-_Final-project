@@ -22,6 +22,11 @@
 		"scene.h": "c",
 		"element.h": "c",
 		"gg_scene.h": "c",
-		"winscene.h": "c"
+		"winscene.h": "c",
+		"gamescene2.h": "c",
+		"projectile_monster1.h": "c",
+		"tree.h": "c",
+		"chara2_choose.h": "c",
+		"hero.h": "c"
 	}
 }

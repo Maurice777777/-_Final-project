@@ -1,8 +1,12 @@
 #ifndef GAMESCENE_H_INCLUDED
 #define GAMESCENE_H_INCLUDED
 #include "scene.h"
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include "../element/element.h"
-#include "../element/charater.h"
+#include "../element/character.h"
 #include "../element/floor.h"
 #include "../element/teleport.h"
 #include "../element/tree.h"
@@ -27,6 +31,8 @@ typedef enum EleType
 typedef struct _GameScene
 {
     ALLEGRO_BITMAP *background;
+    ALLEGRO_SAMPLE *song_gs;
+    ALLEGRO_SAMPLE_INSTANCE *sample_instance_gs;
 
 } GameScene;
 Scene *New_GameScene(int label);

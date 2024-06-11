@@ -31,6 +31,7 @@ typedef struct _Hero
     int width, height;              // the width and height of image
     int life,full_life;
     bool minus_permit;
+    bool minus_permit2;
     int stiff;
     
     int atk2_conti_minus;
@@ -38,6 +39,12 @@ typedef struct _Hero
     int state;                      // the state of Hero
     ALGIF_ANIMATION *gif_status[7]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *atk_Sound;
+    ALLEGRO_SAMPLE *dodgesound;
+    ALLEGRO_SAMPLE_INSTANCE *sample_instance_dodgesound;
+    ALLEGRO_SAMPLE *mon1atk;
+    ALLEGRO_SAMPLE_INSTANCE *mons_atk_Sound;
+    ALLEGRO_SAMPLE *die;
+    ALLEGRO_SAMPLE_INSTANCE *dies;
     int skill;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation
@@ -49,6 +56,7 @@ void _Hero_update_position(Elements *self, int dx, int dy);
 void Hero_update(Elements *self);
 bool Hero_intersect(int x1,bool d1,int x2,int type);
 void Hero_interact(Elements *self, Elements *target);
+void Hero_interact2(Elements *self, Elements *tar);
 void Hero_draw(Elements *self);
 void Hero_destory(Elements *self);
 

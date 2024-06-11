@@ -9,16 +9,19 @@ Scene *New_Winscene(int label)
     Winscene *pDerivedObj = (Winscene *)malloc(sizeof(Winscene));
     Scene *pObj = New_Scene(label);
     pDerivedObj->background = al_load_bitmap("assets/image/winscene.png");
-    printf("蝦\n");
     // setting derived object member
     pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 12, 0);
     // Load sound
-    pDerivedObj->song = al_load_sample("assets/sound/menu.mp3");
+    pDerivedObj->song = al_load_sample("assets/sound/winscene_bgm.mp3");
     al_reserve_samples(20);
-    printf("nice");
     pDerivedObj->sample_instance = al_create_sample_instance(pDerivedObj->song);
     pDerivedObj->title_x = WIDTH / 2;
     pDerivedObj->title_y = HEIGHT / 2;
+    //在玩一次
+    pDerivedObj->target_x = 1420; 
+    pDerivedObj->target_y = 1000; 
+    pDerivedObj->target_width = 300; 
+    pDerivedObj->target_height = 47; 
     // Loop the song until the display closes
     al_set_sample_instance_playmode(pDerivedObj->sample_instance, ALLEGRO_PLAYMODE_LOOP);
     al_restore_default_mixer();
@@ -35,12 +38,22 @@ Scene *New_Winscene(int label)
 }
 void winscene_update(Scene *self)
 {
-    if (key_state[ALLEGRO_KEY_ENTER])
+    Winscene *Obj = ((Winscene *)(self->pDerivedObj));
+    ALLEGRO_MOUSE_STATE state;
+    al_get_mouse_state(&state);
+
+    if (al_mouse_button_down(&state, 1)) // 檢查滑鼠左鍵是否被按下
     {
-        self->scene_end = true;
-        window = 0;
+        printf("HI\n");
+        // 檢查滑鼠的位置是否在你的目標區域內
+        if (state.x >= Obj->target_x && state.x <= Obj->target_x + Obj->target_width &&
+            state.y >= Obj->target_y && state.y <= Obj->target_y + Obj->target_height)
+        {
+            printf("here\n");
+            self->scene_end = true;
+            window = 0; // 跳轉到下一個畫面
+        }
     }
-    return;
 }
 void winscene_draw(Scene *self)
 {

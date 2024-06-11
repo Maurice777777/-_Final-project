@@ -19,7 +19,9 @@ typedef enum MonsterType
     MONSTOP = 0,
     MONMOVE,
     MONATK,
-    MONATK2
+    MONATK2,
+    MONDIE
+    
 } MonsterType;
 typedef struct _Monster
 {
@@ -29,7 +31,7 @@ typedef struct _Monster
     bool mons_dir;
     bool splitted;                       // true: face to right, false: face to left
     int monstate;                      // the state of character
-    ALGIF_ANIMATION *gif_status[4]; // gif for each state. 0: stop, 1: move, 2:attack
+    ALGIF_ANIMATION *gif_status[5]; // gif for each state. 0: stop, 1: move, 2:attack
     ALLEGRO_SAMPLE_INSTANCE *mons_atk_Sound;
     int anime;      // counting the time of animation
     int anime_time; // indicate how long the animation

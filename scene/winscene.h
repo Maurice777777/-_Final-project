@@ -15,6 +15,7 @@ typedef struct _Winscene
     ALLEGRO_SAMPLE_INSTANCE *sample_instance;
     ALLEGRO_BITMAP *background;
     int title_x, title_y;
+    int target_x,target_y,target_width,target_height;
 } Winscene;
 
 Scene *New_Winscene(int label);

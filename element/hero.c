@@ -3,10 +3,12 @@
 #include "projectile.h"
 #include "../global.h"
 #include "monster.h"
+#include "monster1.h"
 #include "../shapes/Rectangle.h"
 #include "../algif5/src/algif.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
@@ -30,26 +32,53 @@ Elements *New_Hero(int label)
     }
 
     //沒動
-    // load effective sound
-    // ALLEGRO_SAMPLE *sample = al_load_sample("assets/sound/atk_sound.wav");
-    // pDerivedObj->atk_Sound = al_create_sample_instance(sample);
-    // al_set_sample_instance_playmode(pDerivedObj->atk_Sound, ALLEGRO_PLAYMODE_ONCE);
-    // al_attach_sample_instance_to_mixer(pDerivedObj->atk_Sound, al_get_default_mixer());
+    //load effective sound
+    ALLEGRO_SAMPLE *sample = al_load_sample("assets/sound/hero_atk.mp3");
+    pDerivedObj->atk_Sound = al_create_sample_instance(sample);
+    al_set_sample_instance_playmode(pDerivedObj->atk_Sound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(pDerivedObj->atk_Sound, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->atk_Sound, 0.3);
+
+    ALLEGRO_SAMPLE *dodgesound = al_load_sample("assets/sound/hero_dodge.mp3");
+    pDerivedObj->sample_instance_dodgesound = al_create_sample_instance(dodgesound);
+    al_set_sample_instance_playmode(pDerivedObj->sample_instance_dodgesound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(pDerivedObj->sample_instance_dodgesound, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->sample_instance_dodgesound, 0.3);
+
+     ALLEGRO_SAMPLE *mon1atk = al_load_sample("assets/sound/mon1_atk.mp3");
+    pDerivedObj->mons_atk_Sound = al_create_sample_instance(mon1atk);
+    al_set_sample_instance_playmode(pDerivedObj->mons_atk_Sound, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(pDerivedObj->mons_atk_Sound, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->mons_atk_Sound, 0.1);
+
+    ALLEGRO_SAMPLE *die = al_load_sample("assets/sound/hero_die.mp3");
+    al_reserve_samples(5);
+    pDerivedObj->dies = al_create_sample_instance(die);
+    al_set_sample_instance_playmode(pDerivedObj->dies, ALLEGRO_PLAYMODE_ONCE);
+    al_attach_sample_instance_to_mixer(pDerivedObj->dies, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->dies, 0.3);
+
 
     // initial the geometric information of Hero
     pDerivedObj->width = pDerivedObj->gif_status[0]->width;
     pDerivedObj->height = pDerivedObj->gif_status[0]->height;
+    if(window==5){
+        pDerivedObj->x = WIDTH/2-50;//910
+        pDerivedObj->y = HEIGHT/2-280;//260
+    }else{
     pDerivedObj->x = 300;
-    pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
+    pDerivedObj->y = HEIGHT - pDerivedObj->height;
+    }
     pDerivedObj->hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,
                                         pDerivedObj->y + pDerivedObj->height);
     pDerivedObj->dir = true; // true: face to right, false: face to left
-    pDerivedObj->life=pDerivedObj->full_life=100;
+    pDerivedObj->life=pDerivedObj->full_life=500;
     
     pDerivedObj->stiff=0;
     pDerivedObj->minus_permit=true;
+    pDerivedObj->minus_permit2=true;
     pObj->inter_obj[pObj->inter_len++] = Monster_L;
     // initial the animation component
     pDerivedObj->state = STOP;
@@ -66,8 +95,14 @@ Elements *New_Hero(int label)
 void Hero_update(Elements *self)
 {
     Hero *chara = ((Hero *)(self->pDerivedObj));
-    if(chara->life==0)    chara->state=die;
+    if(chara->life==0){
+        al_play_sample_instance(chara->dies);
+        chara->state=die;
+    }
     if(chara->state==atked){
+        if(window==1){
+            al_play_sample_instance(chara->mons_atk_Sound);
+        }
         if(chara->gif_status[chara->state]->done)chara->state=stop;
         else return;
     }
@@ -102,6 +137,7 @@ void Hero_update(Elements *self)
         // }
 
         if(chara->state == dodge){
+            al_play_sample_instance(chara->sample_instance_dodgesound);
             if(chara->dir)_Hero_update_position(self, -5, 0);
             else _Hero_update_position(self, 5, 0);
             if (chara->gif_status[chara->state]->done&&!key_state[ALLEGRO_KEY_L])
@@ -144,6 +180,7 @@ void Hero_update(Elements *self)
     }
     else if (chara->state == atk||chara->state == atk2)
     {
+         al_play_sample_instance(chara->atk_Sound);
         if (chara->gif_status[chara->state]->done)
         {
             chara->state = stop;
@@ -171,7 +208,14 @@ void Hero_update(Elements *self)
     }
     else if(chara->state==die&&chara->gif_status[chara->state]->done){
         self->dele=true ;
-        change_window=1;
+        if (window==1)
+        {
+            change_window=3;//第一關
+        }
+        else if(window==2)
+        {      
+            change_window=1;//第二關
+        }
     }
 }
 
@@ -183,13 +227,18 @@ void Hero_draw(Elements *self)
     
     if (frame)
     {
-        hp_bar(50,50,chara->full_life,10,chara->life);
+        if(window==1||window==2){
+        hp_bar(50,50,chara->full_life,30,chara->life);
+        }
         if(chara->state==atk2)
             chara->x-=chara->width,chara->y-=chara->height;
-        if(change_window!=1)
+        if(change_window!=1){
             al_draw_bitmap(frame, chara->x, chara->y, ((chara->dir) ? 0:ALLEGRO_FLIP_HORIZONTAL ));
+        }
         if(chara->state==atk2)
             chara->x+=chara->width,chara->y+=chara->height;
+
+        
     }
     // if (chara->state == atk && chara->gif_status[chara->state]->display_index == 2)
     // {
@@ -231,16 +280,19 @@ bool Hero_intersect(int x,bool xd,int y,int type){
     }
 }
 
-void Hero_interact(Elements *self, Elements *tar) {
+void Hero_interact(Elements *self, Elements *tar)
+ {
+    printf("hola\n");
     Hero *hero = (Hero *)(self->pDerivedObj);
     Monster* target = (Monster*)(tar->pDerivedObj);
-    
+    if(window==1){
     if( hero->state == atk && 
         hero->gif_status[atk]->display_index == 3 &&
         hero->minus_permit &&
-        Hero_intersect(hero->x,hero->dir,target->x,0))
+        (abs(hero->x-target->x)<=250))
     {
-        int minus= 10<=target->life? 10:target->life;
+        //heroattackcontrol
+        int minus= 50<=target->life? 50:target->life;
 
         target->life-= minus;
         hero->minus_permit=false;
@@ -255,6 +307,41 @@ void Hero_interact(Elements *self, Elements *tar) {
         //}
     }
     
+    
 
     if(hero->gif_status[hero->state]->done) hero->minus_permit=true;
+    }
+}
+
+void Hero_interact2(Elements *self, Elements *tar) 
+{
+    if(window==2){
+    printf("wait\n");
+    Hero *hero = (Hero *)(self->pDerivedObj);
+    monster1* target = (monster1*)(tar->pDerivedObj);
+    if( hero->state == atk && 
+        hero->gif_status[atk]->display_index == 3 &&
+        hero->minus_permit2 &&
+        Hero_intersect(hero->x,hero->dir,target->x,0))
+    {
+        int minus= 100<=target->life? 100:target->life;
+
+        target->life-= minus;
+        hero->minus_permit2=false;
+    }
+    if(hero->state==atk2&&
+            hero->gif_status[atk]->display_index >= 3 &&
+            hero->gif_status[atk]->display_index <= 8&&
+            Hero_intersect(hero->x+hero->width,hero->dir,target->x,1))
+     {
+        //else if(hero->atk2_conti_minus<hero->gif_status[atk]->display_index){
+            target->life-= 30<=target->life? 30:target->life;
+            hero->atk2_conti_minus=hero->gif_status[atk]->display_index;
+        //}
+     }
+    
+    
+
+      if(hero->gif_status[hero->state]->done) hero->minus_permit2=true;
+    }
 }

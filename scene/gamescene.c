@@ -1,3 +1,5 @@
+#include <allegro5/allegro_primitives.h>
+#include <stdbool.h>
 #include "gamescene.h"
 //#include "../element/monster.h"
 /*
@@ -9,12 +11,20 @@ Scene *New_GameScene(int label)
     Scene *pObj = New_Scene(label);
     // setting derived object member
     pDerivedObj->background = al_load_bitmap("assets/image/level1.png");
+    pDerivedObj->song_gs = al_load_sample("assets/sound/stage1_bgm.mp3");
+    al_reserve_samples(60);
+    pDerivedObj->sample_instance_gs = al_create_sample_instance(pDerivedObj->song_gs);
+    al_set_sample_instance_playmode(pDerivedObj->sample_instance_gs, ALLEGRO_PLAYMODE_LOOP);
+    al_restore_default_mixer();
+    al_attach_sample_instance_to_mixer(pDerivedObj->sample_instance_gs, al_get_default_mixer());
+    // set the volume of instance
+    al_set_sample_instance_gain(pDerivedObj->sample_instance_gs, 0.2);
     pObj->pDerivedObj = pDerivedObj;
     // register element
-    _Register_elements(pObj, New_Floor(Floor_L));
-    _Register_elements(pObj, New_Teleport(Teleport_L));
-    _Register_elements(pObj, New_Tree(Tree_L));
-    _Register_elements(pObj, New_Character(Character_L));
+    //_Register_elements(pObj, New_Floor(Floor_L));
+    //_Register_elements(pObj, New_Teleport(Teleport_L));
+    //_Register_elements(pObj, New_Tree(Tree_L));
+    //_Register_elements(pObj, New_Character(Character_L));
     _Register_elements(pObj, New_Monster(Monster_L));
     _Register_elements(pObj, New_Hero(Hero_L));
     //_Register_elements(pObj, New_Monster(Monsbullet_L));
@@ -61,7 +71,17 @@ void game_scene_update(Scene *self)
     if(change_window==1)
     {
         self->scene_end = true;
-        window = 3;
+        window = 4;
+        change_window=0;
+    }else if(change_window==2){
+        self->scene_end = true;
+        window = 2;
+        change_window=0;
+    }
+    else if(change_window==3)
+    {
+        self->scene_end = true;
+        window = 6;
         change_window=0;
     }
 
@@ -77,6 +97,7 @@ void game_scene_draw(Scene *self)
     al_clear_to_color(al_map_rgb(0, 0, 0));
     GameScene *gs = ((GameScene *)(self->pDerivedObj));
     al_draw_bitmap(gs->background, 0, 0, 0);
+    al_play_sample_instance(gs->sample_instance_gs);
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++)
     {
@@ -98,6 +119,8 @@ void game_scene_destroy(Scene *self)
         ele->Destroy(ele);
         printf("%d\n",i);
     }
+    al_destroy_sample(Obj->song_gs);
+    al_destroy_sample_instance(Obj->sample_instance_gs);
     free(Obj);
     free(self);
     printf("d all \n");

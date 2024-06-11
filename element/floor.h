@@ -1,7 +1,7 @@
 #ifndef FLOOR_H_INCLUDED
 #define FLOOR_H_INCLUDED
 #include "element.h"
-#include "charater.h"
+#include "character.h"
 #include "../scene/gamescene.h" // for element label
 /*
    [floor object]

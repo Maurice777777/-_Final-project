@@ -48,9 +48,9 @@ void Monsbullet_interact(Elements *self, Elements *_tar)
 {
     Monsbullet *obj = ((Monsbullet *)(self->pDerivedObj));
     Hero* tar=(Hero*)(_tar->pDerivedObj);
-    if(abs(obj->x-tar->x)<3){
+    if((obj->hitbox->overlap(obj->hitbox, tar->hitbox))&&(tar->state!=dodge)){
         self->dele = true;
-        tar->life-=tar->life>=10?10:tar->life;
+        tar->life-=tar->life>=15?15:tar->life;
         tar->state=atked;
     }
 }
@@ -62,7 +62,7 @@ void Monsbullet_draw(Elements *self)
     if (obj->v > 0)
         al_draw_bitmap(frame, obj->x, obj->y, ALLEGRO_FLIP_HORIZONTAL);
     else
-        al_draw_bitmap(frame, obj->x, obj->y, 0);
+       al_draw_bitmap(frame, obj->x, obj->y, 0);
 }
 void Monsbullet_destory(Elements *self)
 {

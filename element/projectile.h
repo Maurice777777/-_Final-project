@@ -13,11 +13,11 @@ typedef struct _Projectile
     int v;             // the velocity of projectile
     ALLEGRO_BITMAP *img;
     Shape *hitbox; // the hitbox of object
-} Projectile;
-Elements *New_Projectile(int label, int x, int y, int v);
-void Projectile_update(Elements *self);
-void Projectile_interact(Elements *self, Elements *tar);
-void Projectile_draw(Elements *self);
-void Projectile_destory(Elements *self);
-void _Projectile_update_position(Elements *self, int dx, int dy);
+} Projectile_chara;
+Elements *Newcharacter_Projectile(int label, int x, int y, int v);
+void Projectile_character_update(Elements *const ele);
+void Projectile_character_interact(Elements *const, Elements *const);
+void Projectile_character_draw(Elements *const ele);
+void Projectile_character_destory(Elements *const ele);
+void _Projectile_character_update_position(Elements *const self, int dx, int dy);
 #endif

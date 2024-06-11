@@ -114,7 +114,7 @@ void game_init(Game *self)
     al_register_event_source(event_queue, al_get_timer_event_source(fps));
     al_start_timer(fps);
     // initialize the icon on the display
-    ALLEGRO_BITMAP *icon = al_load_bitmap("assets/image/icon.jpg");
+    ALLEGRO_BITMAP *icon = al_load_bitmap("assets/image/icon.png");
     al_set_display_icon(self->display, icon);
 }
 bool game_update(Game *self)
@@ -132,10 +132,28 @@ bool game_update(Game *self)
             create_scene(GameScene_L);
             break;
         case 2:
-            create_scene(WinScene_L);
+            create_scene(GameScene2_L);
             break;
         case 3:
+            create_scene(WinScene_L);
+            break;
+        case 4:
             create_scene(GgScene_L);
+            break;
+        case 5:
+            create_scene(Ch1c_L);
+            break;
+        case 6:
+            create_scene(Lscene_L);
+            break;
+        case 7:
+            create_scene(Hero1info_L);
+            break;
+        case 8:
+            create_scene(Hero2info_L);
+            break;
+        case 9:
+            create_scene(Ch2c_L);
             break;
         case -1:
             return false;
