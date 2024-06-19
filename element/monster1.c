@@ -108,7 +108,7 @@ void monster1_interact(Elements *const self, Elements *const target)
     monster1 *self_monster = (monster1 *)(self->pDerivedObj);
     Hero *target_character = (Hero *)(target->pDerivedObj);
 
-    coolcounter--;
+    
 
     // 獲取 Character 的 x 位置
     int target_x = target_character->x;
@@ -125,7 +125,7 @@ void monster1_interact(Elements *const self, Elements *const target)
         {
             printf("conceal animition done.");
             self_monster->mons2state = APPEAR1;
-            self_monster->y = HEIGHT - self_monster->height - 70;
+            self_monster->y = HEIGHT - self_monster->height - 120;
             self_monster->x = target_x;
             // self_monster->gif_status[CONCEAL1]->notdone;
 
@@ -136,7 +136,7 @@ void monster1_interact(Elements *const self, Elements *const target)
     if (coolcounter==0)
     {
         Elements *pro2;
-        pro2=New_Projectile2_monster1(Projectile2_monster1_L, target_character->x,-1,8);
+        pro2=New_Projectile2_monster1(Projectile2_monster1_L, target_character->x,-1,7);
         _Register_elements(scene, pro2);
         coolcounter=420-coolcounterdecrease;
         if(coolcounterdecrease<=220){
@@ -148,6 +148,8 @@ void monster1_interact(Elements *const self, Elements *const target)
         // chara->state=MOVE1;// Set state to conceal
         //}
     }
+
+    coolcounter--;
 
     if(self_monster->mons2state == ANGRYWALK1){
         if ((self_monster->x < target_x - 50) && (((target_x - 50) - (self_monster->x)) > 100))
@@ -246,8 +248,8 @@ void monster1_update(Elements *const ele)
     // use the idea of finite state machine to deal with different state
     monster1 *chara = ((monster1 *)(ele->pDerivedObj));
     // Character *target = (Character *)(target->pDerivedObj);
-    ALLEGRO_TIMER *shellTimer = al_create_timer(1.0);
-    time_t starttime, endtime;
+    //ALLEGRO_TIMER *shellTimer = al_create_timer(1.0);
+    //time_t starttime, endtime;
     if(chara->life==0){chara->mons2state=DIE1;}
     // int atkcount=0;
     if (levelstart == 0)

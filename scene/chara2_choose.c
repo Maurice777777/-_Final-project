@@ -47,8 +47,8 @@ Scene *New_ch2c(int label)
     pDerivedObj->hero2info_width = 163; 
     pDerivedObj->hero2info_height = 162; 
      //換角色(右)
-    pDerivedObj->lselect_x = 1000; 
-    pDerivedObj->lselect_y = 10; 
+    pDerivedObj->lselect_x = 500; 
+    pDerivedObj->lselect_y = 500; 
     pDerivedObj->lselect_width = 54; 
     pDerivedObj->lselect_height = 56; 
     // Loop the song until the display closes
@@ -84,7 +84,7 @@ void ch2c_draw(Scene *self)
     al_draw_bitmap(Obj->start, 850, 720, 0); 
     al_draw_bitmap(Obj->back, 5, 5, 0); 
     al_draw_bitmap(Obj->hero2info, 1747, 10, 0); 
-     al_draw_bitmap(Obj->lselect, 1000, 10, 0); 
+     al_draw_bitmap(Obj->lselect, 500, 500, 0); 
     //al_draw_text(Obj->font, al_map_rgb(255, 255, 255), Obj->title_x, Obj->title_y, ALLEGRO_ALIGN_CENTRE, "Press 'Enter' to start");
     //al_draw_rectangle(Obj->title_x - 150, Obj->title_y - 30, Obj->title_x + 150, Obj->title_y + 30, al_map_rgb(255, 255, 255), 0);
     al_play_sample_instance(Obj->sample_instance);
@@ -217,7 +217,7 @@ void ch2c_update(Scene *self)
             al_set_sample_instance_gain(Obj->sample_instance_click, 0.3);
             al_play_sample_instance(Obj->sample_instance_click);
             self->scene_end = true;
-            window = 9; // 跳轉到下一個畫面
+            window = 5; // 跳轉到下一個畫面
         }
     }
     

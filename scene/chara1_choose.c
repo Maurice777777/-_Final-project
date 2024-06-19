@@ -50,8 +50,8 @@ Scene *New_ch1c(int label)
     pDerivedObj->hero1info_width = 163; 
     pDerivedObj->hero1info_height = 162; 
     //換角色(右)
-    pDerivedObj->rselect_x = 1000; 
-    pDerivedObj->rselect_y = 10; 
+    pDerivedObj->rselect_x = 1500; 
+    pDerivedObj->rselect_y = 500; 
     pDerivedObj->rselect_width = 54; 
     pDerivedObj->rselect_height = 56; 
     // Loop the song until the display closes
@@ -89,7 +89,7 @@ void ch1c_draw(Scene *self)
     al_draw_bitmap(Obj->start, 850, 720, 0); 
     al_draw_bitmap(Obj->back, 5, 5, 0); 
     al_draw_bitmap(Obj->hero1info, 1747, 10, 0); 
-    al_draw_bitmap(Obj->rselect, 1000, 10, 0); 
+    al_draw_bitmap(Obj->rselect, 1500, 500, 0); 
     //al_draw_text(Obj->font, al_map_rgb(255, 255, 255), Obj->title_x, Obj->title_y, ALLEGRO_ALIGN_CENTRE, "Press 'Enter' to start");
     //al_draw_rectangle(Obj->title_x - 150, Obj->title_y - 30, Obj->title_x + 150, Obj->title_y + 30, al_map_rgb(255, 255, 255), 0);
     al_play_sample_instance(Obj->sample_instance);

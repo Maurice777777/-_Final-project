@@ -292,7 +292,7 @@ void Hero_interact(Elements *self, Elements *tar)
         (abs(hero->x-target->x)<=250))
     {
         //heroattackcontrol
-        int minus= 50<=target->life? 50:target->life;
+        int minus= 100<=target->life? 100:target->life;
 
         target->life-= minus;
         hero->minus_permit=false;
